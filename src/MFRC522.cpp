@@ -1368,22 +1368,22 @@ const __FlashStringHelper *MFRC522::PICC_GetTypeName(PICC_Type piccType	///< One
  * Shows all known firmware versions
  */
 void MFRC522::PCD_DumpVersionToSerial() {
-	// Get the MFRC522 firmware version
-	byte v = PCD_ReadRegister(VersionReg);
-	Serial.print(F("Firmware Version: 0x"));
-	Serial.print(v, HEX);
-	// Lookup which version
-	switch(v) {
-		case 0x88: Serial.println(F(" = (clone)"));  break;
-		case 0x90: Serial.println(F(" = v0.0"));     break;
-		case 0x91: Serial.println(F(" = v1.0"));     break;
-		case 0x92: Serial.println(F(" = v2.0"));     break;
-		case 0x12: Serial.println(F(" = counterfeit chip"));     break;
-		default:   Serial.println(F(" = (unknown)"));
-	}
-	// When 0x00 or 0xFF is returned, communication probably failed
-	if ((v == 0x00) || (v == 0xFF))
-		Serial.println(F("WARNING: Communication failure, is the MFRC522 properly connected?"));
+	// // Get the MFRC522 firmware version
+	// byte v = PCD_ReadRegister(VersionReg);
+	// Serial.print(F("Firmware Version: 0x"));
+	// Serial.print(v, HEX);
+	// // Lookup which version
+	// switch(v) {
+	// 	case 0x88: Serial.println(F(" = (clone)"));  break;
+	// 	case 0x90: Serial.println(F(" = v0.0"));     break;
+	// 	case 0x91: Serial.println(F(" = v1.0"));     break;
+	// 	case 0x92: Serial.println(F(" = v2.0"));     break;
+	// 	case 0x12: Serial.println(F(" = counterfeit chip"));     break;
+	// 	default:   Serial.println(F(" = (unknown)"));
+	// }
+	// // When 0x00 or 0xFF is returned, communication probably failed
+	// if ((v == 0x00) || (v == 0xFF))
+	// 	Serial.println(F("WARNING: Communication failure, is the MFRC522 properly connected?"));
 } // End PCD_DumpVersionToSerial()
 
 /**
@@ -1398,36 +1398,36 @@ void MFRC522::PICC_DumpToSerial(Uid *uid	///< Pointer to Uid struct returned fro
 	// Dump UID, SAK and Type
 	PICC_DumpDetailsToSerial(uid);
 	
-	// Dump contents
-	PICC_Type piccType = PICC_GetType(uid->sak);
-	switch (piccType) {
-		case PICC_TYPE_MIFARE_MINI:
-		case PICC_TYPE_MIFARE_1K:
-		case PICC_TYPE_MIFARE_4K:
-			// All keys are set to FFFFFFFFFFFFh at chip delivery from the factory.
-			for (byte i = 0; i < 6; i++) {
-				key.keyByte[i] = 0xFF;
-			}
-			PICC_DumpMifareClassicToSerial(uid, piccType, &key);
-			break;
+	// // Dump contents
+	// PICC_Type piccType = PICC_GetType(uid->sak);
+	// switch (piccType) {
+	// 	case PICC_TYPE_MIFARE_MINI:
+	// 	case PICC_TYPE_MIFARE_1K:
+	// 	case PICC_TYPE_MIFARE_4K:
+	// 		// All keys are set to FFFFFFFFFFFFh at chip delivery from the factory.
+	// 		for (byte i = 0; i < 6; i++) {
+	// 			key.keyByte[i] = 0xFF;
+	// 		}
+	// 		PICC_DumpMifareClassicToSerial(uid, piccType, &key);
+	// 		break;
 			
-		case PICC_TYPE_MIFARE_UL:
-			PICC_DumpMifareUltralightToSerial();
-			break;
+	// 	case PICC_TYPE_MIFARE_UL:
+	// 		PICC_DumpMifareUltralightToSerial();
+	// 		break;
 			
-		case PICC_TYPE_ISO_14443_4:
-		case PICC_TYPE_MIFARE_DESFIRE:
-		case PICC_TYPE_ISO_18092:
-		case PICC_TYPE_MIFARE_PLUS:
-		case PICC_TYPE_TNP3XXX:
-			Serial.println(F("Dumping memory contents not implemented for that PICC type."));
-			break;
+	// 	case PICC_TYPE_ISO_14443_4:
+	// 	case PICC_TYPE_MIFARE_DESFIRE:
+	// 	case PICC_TYPE_ISO_18092:
+	// 	case PICC_TYPE_MIFARE_PLUS:
+	// 	case PICC_TYPE_TNP3XXX:
+	// 		Serial.println(F("Dumping memory contents not implemented for that PICC type."));
+	// 		break;
 			
-		case PICC_TYPE_UNKNOWN:
-		case PICC_TYPE_NOT_COMPLETE:
-		default:
-			break; // No memory dump here
-	}
+	// 	case PICC_TYPE_UNKNOWN:
+	// 	case PICC_TYPE_NOT_COMPLETE:
+	// 	default:
+	// 		break; // No memory dump here
+	// }
 	
 	Serial.println();
 	PICC_HaltA(); // Already done if it was a MIFARE Classic PICC.
@@ -1439,7 +1439,7 @@ void MFRC522::PICC_DumpToSerial(Uid *uid	///< Pointer to Uid struct returned fro
 void MFRC522::PICC_DumpDetailsToSerial(Uid *uid	///< Pointer to Uid struct returned from a successful PICC_Select().
 									) {
 	// UID
-	Serial.print(F("Card UID:"));
+	// Serial.print(F("Card UID:"));
 	for (byte i = 0; i < uid->size; i++) {
 		if(uid->uidByte[i] < 0x10)
 			Serial.print(F(" 0"));
@@ -1447,18 +1447,18 @@ void MFRC522::PICC_DumpDetailsToSerial(Uid *uid	///< Pointer to Uid struct retur
 			Serial.print(F(" "));
 		Serial.print(uid->uidByte[i], HEX);
 	} 
-	Serial.println();
+	// Serial.println();
 	
-	// SAK
-	Serial.print(F("Card SAK: "));
-	if(uid->sak < 0x10)
-		Serial.print(F("0"));
-	Serial.println(uid->sak, HEX);
+	// // SAK
+	// Serial.print(F("Card SAK: "));
+	// if(uid->sak < 0x10)
+	// 	Serial.print(F("0"));
+	// Serial.println(uid->sak, HEX);
 	
-	// (suggested) PICC type
-	PICC_Type piccType = PICC_GetType(uid->sak);
-	Serial.print(F("PICC type: "));
-	Serial.println(PICC_GetTypeName(piccType));
+	// // (suggested) PICC type
+	// PICC_Type piccType = PICC_GetType(uid->sak);
+	// Serial.print(F("PICC type: "));
+	// Serial.println(PICC_GetTypeName(piccType));
 } // End PICC_DumpDetailsToSerial()
 
 /**
